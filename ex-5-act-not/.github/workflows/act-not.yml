@@ -1,0 +1,24 @@
+name: ACT Not
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  ActRun:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "I'm job, that always run."
+
+  ActNot:
+    if: ${{ !github.event.act }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "I'm step 1️⃣"
+      - if: ${{ !env.ACT }}
+        run: |
+          echo "I'm step 2️⃣"
+      - run: |
+          echo "I'm step 3️⃣"
