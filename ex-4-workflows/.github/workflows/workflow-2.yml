@@ -1,0 +1,24 @@
+name: Two
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  Gamma:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step ${{ github.workflow }} ${{ github.job }}
+        run: |
+          echo "I'm workflow ${{ github.workflow }}, job ${{ github.job }}❗"
+
+  Delta:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step ${{ github.workflow }} ${{ github.job }}
+        run: |
+          echo "I'm workflow ${{ github.workflow }}, job ${{ github.job }}❗"
