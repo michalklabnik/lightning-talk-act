@@ -1,0 +1,56 @@
+name: Workflow Services
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  Job-Services:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16.2
+        env:
+          POSTGRES_DB: postgres_db
+          POSTGRES_USER: postgres_user
+          POSTGRES_PASSWORD: postgres_password
+        ports:
+          - 65432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-start-period 10s
+          --health-retries 5
+
+      redis:
+        image: redis:7.2
+        ports:
+          - 16379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-start-period 10s
+          --health-retries 5
+
+    steps:
+      - name: Install PostgreSQL and Redis client
+        run: |
+          apt-get update --quiet
+          apt-get install --quiet --yes --no-install-recommends postgresql-client redis-tools
+
+      - name: Connect to PostgreSQL
+        env:
+          PGHOST: localhost
+          PGPORT: 65432
+          PGDATABASE: postgres_db
+          PGUSER: postgres_user
+          PGPASSWORD: postgres_password
+        run: |
+          psql -c 'SELECT NOW();'
+
+      - name: Connect to Redis
+        run: |
+          redis-cli -h localhost -p 16379 PING
