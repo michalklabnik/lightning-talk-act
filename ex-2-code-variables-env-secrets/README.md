@@ -9,7 +9,7 @@ act --job Job-Code
 ## Variables
 
 ```shell
-act --job Job-Variables --var-file .local/my.variables
+act --job Job-Variables --var-file .local/.variables
 ```
 
 ```shell
